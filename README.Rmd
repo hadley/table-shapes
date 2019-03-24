@@ -1,0 +1,129 @@
+---
+output: github_document
+---
+
+# Pivot function names
+
+On 2019-03-22, I [tweeted about](https://twitter.com/hadleywickham/status/1109132826631421952) a [survey](https://forms.gle/vvYgBw1EwHK69gA17) to help me pick names for the [new pivot functions](https://tidyr.tidyverse.org/dev/articles/pivot.html) in the dev version of tidyr.
+
+In the survey, I showed a picture of two tables containing the same data, and asked participants to describe their relative shapes. This document describes the results. 
+
+![Table A has four columns (id, x, y, z) and 2 rows. Table B has three columns (id, n, x) and six rows](table.png)
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+```{r setup, message = FALSE}
+library(googlesheets)
+library(tidyverse)
+
+# This googlesheet is public if you want to do your own analysis
+key <- gs_key("1Do5R1k5sEZrwU0N1KmIjKaapHDrf7eYLdIlcGNx-MsI")
+results <- googlesheets::gs_read(key, col_types = list())
+names(results) <- c("timestamp", "table_a", "table_b")
+head(results)
+
+nrow(results)
+
+# Capture for posterity
+write_csv(results, "results.csv")
+```
+
+## Table A -> Table B
+
+Wider is the clear winner with ~80% of responses.
+
+```{r}
+table_a <- results %>% 
+  filter(!is.na(table_a)) %>% 
+  mutate(top3 = table_a %>% fct_lump(3) %>% fct_infreq() %>% fct_rev()) %>%
+  count(top3) %>% 
+  mutate(prop = n / sum(n))
+
+table_a %>% 
+  ggplot(aes(top3, prop)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = NULL,
+    y = "Percent of responses"
+  ) + 
+  coord_flip()
+```
+
+There were a wide range of write in respones. The most popular included concise, compact, condense, denser.
+
+```{r}
+results %>% 
+  mutate(
+    table_a = table_a %>% 
+      str_remove("Table A is ") %>% 
+      str_remove(" than Table B") %>% 
+      str_trunc(50)
+  ) %>% 
+  count(table_a, sort = TRUE) %>% 
+  print(n = Inf)
+```
+
+## Table B -> Table A
+
+Longer is the clear winner with ~70% of responses. Given the number of people who suggested taller to me, I had expected it to come in much higher. Interestingly narrower is much less common than shorter, it's equivalent above.
+
+```{r}
+table_b <- results %>% 
+  filter(!is.na(table_b)) %>% 
+  mutate(top3 = table_b %>% fct_lump(3) %>% fct_infreq() %>% fct_rev()) %>%
+  count(top3) %>% 
+  mutate(prop = n / sum(n))
+
+table_b %>% 
+  ggplot(aes(top3, prop)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = NULL,
+    y = "Percent of responses"
+  ) + 
+  coord_flip()
+```
+
+There were a wide range of write in respones. The most popular included expanded and skinnier.
+
+```{r}
+results %>% 
+  mutate(
+    table_b = table_b %>% 
+      str_remove("Table B is ") %>% 
+      str_remove(" than Table A") %>% 
+      str_trunc(50)
+  ) %>% 
+  count(table_b, sort = TRUE) %>% 
+  print(n = Inf)
+```
+
+## Conclusion
+
+The new functions will be called `pivot_wider()` and `pivot_longer()`: these are not the most natural names for everyone, but they are are the most popular by a large margin. I like pivot because it suggests the form of the underlying operation (a pivoting or rotation), and it is evocative to excel users.
+
+A few alternatives that were suggested, considered, and rejected:
+
+* `VERB_long()`/`VERB_wide()`: not obvious whether they take long/wide
+  data or return long/wide data.
+  
+* `VERB_to_long()`/`VERB_to_wider()`: implies that long and wide are absolute
+  terms. I don't think it makes sense to talk about long or wide form data;
+  you can only say one form is longer or wider than another form.
+  
+* `to_long()`/`to_wide()`: isn't a verb, and implies that there's only one 
+  operation that makes data longer/wider. The next version of tidyr will also
+  contain functions that unnest list-columns of vectors, and that verb (name 
+  TBA) also needs directional suffixes.
+  
+* `reshape_SHAPE`: too much potential for confusion with the existing 
+  `base::resahpe()`
+
+* `gather()`/`spread()`: while some people clearly liked these functions they
+  were not memorable to a large number of people I talked to. 
+
+I appreciate the enthusiasm that people have for naming functions! 
