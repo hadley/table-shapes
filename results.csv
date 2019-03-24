@@ -2648,3 +2648,6 @@ timestamp,table_a,table_b
 3/24/2019 8:40:08,Table A is wider than Table B,Table B is longer than Table A
 3/24/2019 8:40:53,Table A is wider than Table B,Table B is longer than Table A
 3/24/2019 8:49:56,Table A is wider than Table B,Table B is longer than Table A
+3/24/2019 9:20:27,Table A is wider than Table B,Table B is longer than Table A
+3/24/2019 9:46:04,Table A is shorter than Table B,Table B is taller than Table A
+3/24/2019 10:08:35,Table A is wider than Table B,Table B is longer than Table A

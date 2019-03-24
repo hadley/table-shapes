@@ -1,19 +1,12 @@
 
-# Pivot function names
+Pivot function names
+====================
 
-On 2019-03-22, I [tweeted
-about](https://twitter.com/hadleywickham/status/1109132826631421952) a
-[survey](https://forms.gle/vvYgBw1EwHK69gA17) to help me pick names for
-the [new pivot
-functions](https://tidyr.tidyverse.org/dev/articles/pivot.html) in the
-dev version of tidyr.
+On 2019-03-22, I [tweeted about](https://twitter.com/hadleywickham/status/1109132826631421952) a [survey](https://forms.gle/vvYgBw1EwHK69gA17) to help me pick names for the [new pivot functions](https://tidyr.tidyverse.org/dev/articles/pivot.html) in the dev version of tidyr.
 
-In the survey, I showed a picture of two tables containing the same
-data, and asked participants to describe their relative shapes. This
-document describes the results.
+In the survey, I showed a picture of two tables containing the same data, and asked participants to describe their relative shapes. This document describes the results.
 
-![Table A has four columns (id, x, y, z) and 2 rows. Table B has three
-columns (id, n, x) and six rows](table.png)
+![Table A has four columns (id, x, y, z) and 2 rows. Table B has three columns (id, n, x) and six rows](table.png)
 
 ``` r
 library(googlesheets)
@@ -35,13 +28,14 @@ head(results)
 #> 6 3/22/2019 10:37:… Table A is shallower than … Table B is narrower than T…
 
 nrow(results)
-#> [1] 2649
+#> [1] 2652
 
 # Capture for posterity
 write_csv(results, "results.csv")
 ```
 
-## Table A -\> Table B
+Table A -&gt; Table B
+---------------------
 
 Wider is the clear winner with ~80% of responses.
 
@@ -63,10 +57,9 @@ table_a %>%
   coord_flip()
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
-There were a wide range of write in respones. The most popular included
-concise, compact, condense, denser.
+There were a wide range of write in respones. The most popular included concise, compact, condense, denser.
 
 ``` r
 results %>% 
@@ -81,8 +74,8 @@ results %>%
 #> # A tibble: 99 x 2
 #>    table_a                                                n
 #>    <chr>                                              <int>
-#>  1 wider                                               2121
-#>  2 shorter                                              328
+#>  1 wider                                               2123
+#>  2 shorter                                              329
 #>  3 shallower                                             90
 #>  4 Compact                                                4
 #>  5 more compact                                           4
@@ -182,12 +175,10 @@ results %>%
 #> 99 unique on one variable and is wider                    1
 ```
 
-## Table B -\> Table A
+Table B -&gt; Table A
+---------------------
 
-Longer is the clear winner with ~70% of responses. Given the number of
-people who suggested taller to me, I had expected it to come in much
-higher. Interestingly narrower is much less common than shorter, it’s
-equivalent above.
+Longer is the clear winner with ~70% of responses. Given the number of people who suggested taller to me, I had expected it to come in much higher. Interestingly narrower is much less common than shorter, it's equivalent above.
 
 ``` r
 table_b <- results %>% 
@@ -207,10 +198,9 @@ table_b %>%
   coord_flip()
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](README_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
-There were a wide range of write in respones. The most popular included
-expanded and skinnier.
+There were a wide range of write in respones. The most popular included expanded and skinnier.
 
 ``` r
 results %>% 
@@ -225,8 +215,8 @@ results %>%
 #> # A tibble: 96 x 2
 #>    table_b                                                      n
 #>    <chr>                                                    <int>
-#>  1 longer                                                    1844
-#>  2 taller                                                     419
+#>  1 longer                                                    1846
+#>  2 taller                                                     420
 #>  3 narrower                                                   171
 #>  4 deeper                                                     116
 #>  5 <NA>                                                         7
@@ -323,34 +313,21 @@ results %>%
 #> 96 worse                                                        1
 ```
 
-## Conclusion
+Conclusion
+----------
 
-The new functions will be called `pivot_wider()` and `pivot_longer()`:
-these are not the most natural names for everyone, but they are are the
-most popular by a large margin. I like pivot because it suggests the
-form of the underlying operation (a pivoting or rotation), and it is
-evocative to excel users.
+The new functions will be called `pivot_wider()` and `pivot_longer()`: these are not the most natural names for everyone, but they are are the most popular by a large margin. I like pivot because it suggests the form of the underlying operation (a pivoting or rotation), and it is evocative to excel users.
 
 A few alternatives that were suggested, considered, and rejected:
 
-  - `VERB_long()`/`VERB_wide()`: not obvious whether they take long/wide
-    data or return long/wide data.
+-   `VERB_long()`/`VERB_wide()`: not obvious whether they take long/wide data or return long/wide data.
 
-  - `VERB_to_long()`/`VERB_to_wider()`: implies that long and wide are
-    absolute terms. I don’t think it makes sense to talk about long or
-    wide form data; you can only say one form is longer or wider than
-    another form.
+-   `VERB_to_long()`/`VERB_to_wider()`: implies that long and wide are absolute terms. I don't think it makes sense to talk about long or wide form data; you can only say one form is longer or wider than another form.
 
-  - `to_long()`/`to_wide()`: isn’t a verb, and implies that there’s only
-    one operation that makes data longer/wider. The next version of
-    tidyr will also contain functions that unnest list-columns of
-    vectors, and that verb (name TBA) also needs directional suffixes.
+-   `to_long()`/`to_wide()`: isn't a verb, and implies that there's only one operation that makes data longer/wider. The next version of tidyr will also contain functions that unnest list-columns of vectors, and that verb (name TBA) also needs directional suffixes.
 
-  - `reshape_SHAPE`: too much potential for confusion with the existing
-    `base::resahpe()`
+-   `reshape_SHAPE`: too much potential for confusion with the existing `stats::reshape()`
 
-  - `gather()`/`spread()`: while some people clearly liked these
-    functions they were not memorable to a large number of people I
-    talked to.
+-   `gather()`/`spread()`: while some people clearly liked these functions they were not memorable to a large number of people I talked to.
 
-I appreciate the enthusiasm that people have for naming functions\!
+I appreciate the enthusiasm that people have for naming functions!

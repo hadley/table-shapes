@@ -121,7 +121,7 @@ A few alternatives that were suggested, considered, and rejected:
   TBA) also needs directional suffixes.
   
 * `reshape_SHAPE`: too much potential for confusion with the existing 
-  `base::resahpe()`
+  `stats::reshape()`
 
 * `gather()`/`spread()`: while some people clearly liked these functions they
   were not memorable to a large number of people I talked to. 
