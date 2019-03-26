@@ -326,7 +326,7 @@ results %>%
 ## Conclusion
 
 The new functions will be called `pivot_wider()` and `pivot_longer()`:
-these are not the most natural names for everyone, but they are are the
+these are not the most natural names for everyone, but they are the
 most popular by a large margin. I like pivot because it suggests the
 form of the underlying operation (a pivoting or rotation), and it is
 evocative to excel users.
@@ -347,7 +347,7 @@ A few alternatives that were suggested, considered, and rejected:
     vectors, and that verb (name TBA) also needs directional suffixes.
 
   - `reshape_SHAPE`: too much potential for confusion with the existing
-    `base::resahpe()`
+    `base::reshape()`
 
   - `gather()`/`spread()`: while some people clearly liked these
     functions they were not memorable to a large number of people I
